@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grammar Helper</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="eyebrow">ENGLISH CLASS • KIND PRACTICE</div>
+      <h1>Grammar Helper</h1>
+      <p>Understand the exact sentence that is confusing you, then practice the same grammar pattern.</p>
+    </header>
+
+    <section class="card lesson-card" aria-labelledby="lesson-title">
+      <div class="section-heading"><span class="step">1</span><div><h2 id="lesson-title">Paste a confusing sentence</h2><p>Grammar Helper will explain the rule in simple words.</p></div></div>
+      <textarea id="sentence" maxlength="2000" placeholder="Example: Although it was raining, we walked to class."></textarea>
+      <div class="actions"><button id="ask-button">Explain this sentence</button><span id="status" role="status"></span></div>
+      <div id="answer" class="answer" hidden></div>
+    </section>
+
+    <section class="card practice-card" aria-labelledby="practice-title">
+      <div class="section-heading"><span class="step">2</span><div><h2 id="practice-title">Practice kindly</h2><p>Try changing or completing a sentence with the same pattern.</p></div></div>
+      <textarea id="practice" maxlength="1000" placeholder="Write your practice answer here..."></textarea>
+      <button id="save-button" class="secondary">Save practice on this computer</button>
+      <p id="save-status" class="small-status" role="status"></p>
+    </section>
+
+    <section class="card samples-card" aria-labelledby="samples-title">
+      <div class="section-heading"><span class="spark">✦</span><div><h2 id="samples-title">Your sample sentences</h2><p>These stay in this browser only.</p></div></div>
+      <div id="samples"></div>
+    </section>
+    <footer>Saves on this computer only for now • Grammar Helper keeps your key on the server.</footer>
+  </main>
+  <script src="/storage.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
