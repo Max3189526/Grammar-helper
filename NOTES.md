@@ -13,12 +13,19 @@ OpenAI model with “luna” in its name: gpt-5.6-luna
 ## How to run
 `npm start`
 
+## Vercel setup
+- Vercel serves the files in `public/` and runs `api/grammar.js` as the small serverless AI endpoint.
+- Add the environment variable `OPENAI_API_KEY` in Vercel Project Settings for Preview and Production.
+- No other Vercel setting is needed for this project. Keep the project root as the Root Directory.
+- The browser saves practice data in localStorage; it is not uploaded.
+
 ## What’s done
 - Version 1 MVP UI and real OpenAI server connection are built.
 - The key is read only from `.env`, and `.env` is ignored by Git.
 - Practice sentences save in browser localStorage only.
 - Saves on this computer only for now.
 - The local page works, but the current OpenAI key was rejected; replace it in `.env` before using AI.
+- The Vercel deployment shape is ready; the local server remains available with `npm start`.
 
 ## What’s next
 - Test the four MVP features with student examples.
