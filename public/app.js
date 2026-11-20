@@ -5,6 +5,17 @@ const answer = document.querySelector('#answer');
 const status = document.querySelector('#status');
 const saveButton = document.querySelector('#save-button');
 const saveStatus = document.querySelector('#save-status');
+const themeButton = document.querySelector('#theme-button');
+
+function setTheme(dark) {
+  document.body.classList.toggle('dark-mode', dark);
+  themeButton.textContent = dark ? '☀️ Light mode' : '🌙 Dark mode';
+  themeButton.setAttribute('aria-pressed', String(dark));
+  localStorage.setItem('grammar-helper-theme', dark ? 'dark' : 'light');
+}
+
+themeButton.addEventListener('click', () => setTheme(!document.body.classList.contains('dark-mode')));
+setTheme(localStorage.getItem('grammar-helper-theme') === 'dark');
 
 function renderSamples() {
   document.querySelector('#samples').innerHTML = GrammarStorage.loadSamples().map(item => `<div class="sample"><strong>${escapeHtml(item.sentence)}</strong><span>${escapeHtml(item.note)}</span></div>`).join('');
