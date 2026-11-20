@@ -30,7 +30,7 @@ askButton.addEventListener('click', async () => {
   try {
     const response = await fetch('/api/grammar', { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify({ sentence }) });
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error);
+    if (!response.ok) throw new Error(typeof data.error === 'object' ? data.error.message : data.error);
     answer.textContent = data.answer; answer.hidden = false; status.textContent = 'Here is your explanation.';
   } catch (error) { status.textContent = error.message || 'I cannot answer right now. Please check the key.'; }
   finally { askButton.disabled = false; }

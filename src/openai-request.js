@@ -12,9 +12,14 @@ async function requestOpenAI({ apiKey, model, sentence }) {
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({ model, instructions: SYSTEM_INSTRUCTIONS, input: sentence, temperature: 0.3 })
   });
-  if (!response.ok) throw new Error(`OpenAI request failed: ${response.status}`);
+  if (!response.ok) {
+    const error = new Error('OpenAI could not answer this request.');
+    error.status = response.status;
+    error.fix = response.status === 401 ? 'Ask the key service for a new key.' : 'Check the OpenAI service and your internet connection.';
+    throw error;
+  }
   const data = await response.json();
-  if (!data.output_text) throw new Error('OpenAI returned no answer');
+  if (!data.output_text) { const error = new Error('OpenAI returned no answer.'); error.fix = 'Try the request again later.'; throw error; }
   return data.output_text;
 }
 

@@ -26,6 +26,7 @@ OpenAI model with “luna” in its name: gpt-5.6-luna
 - Saves on this computer only for now.
 - The local page works, but the current OpenAI key was rejected; replace it in `.env` before using AI.
 - The Vercel deployment shape is ready; the local server remains available with `npm start`.
+- The AI key comes from the server-only `getKey()` helper, which asks MindDo for a temporary key and refreshes it when it expires or OpenAI rejects it.
 
 ## What’s next
 - Test the four MVP features with student examples.

@@ -2,21 +2,11 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { requestOpenAI } = require('./src/openai-request');
+const { getKey, clearKey } = require('./src/key-manager');
 
 const PORT = Number(process.env.PORT || 3000);
 const root = path.join(__dirname, 'public');
 
-function loadEnv() {
-  const envPath = path.join(__dirname, '.env');
-  if (!fs.existsSync(envPath)) return {};
-  return Object.fromEntries(fs.readFileSync(envPath, 'utf8').split(/\r?\n/).filter(Boolean).map(line => {
-    const index = line.indexOf('=');
-    return index < 0 ? [line, ''] : [line.slice(0, index).trim(), line.slice(index + 1).trim()];
-  }));
-}
-
-const env = loadEnv();
-const apiKey = env.OPENAI_API_KEY;
 const model = 'gpt-5.6-luna';
 
 function sendJson(res, status, data) {
@@ -51,11 +41,14 @@ const server = http.createServer(async (req, res) => {
       const body = JSON.parse(await readBody(req));
       const sentence = String(body.sentence || '').trim();
       if (!sentence) return sendJson(res, 400, { error: 'Please enter a sentence or grammar question.' });
-      if (!apiKey || apiKey === 'paste-your-key-here') return sendJson(res, 503, { error: 'I cannot answer right now. Please check the OpenAI key in .env.' });
-      const answer = await requestOpenAI({ apiKey, model, sentence });
+      let apiKey = await getKey();
+      let answer;
+      try { answer = await requestOpenAI({ apiKey, model, sentence }); }
+      catch (error) { if (error.status !== 401) throw error; clearKey(); apiKey = await getKey(); answer = await requestOpenAI({ apiKey, model, sentence }); }
       return sendJson(res, 200, { answer });
     } catch (error) {
-      return sendJson(res, 502, { error: 'I cannot answer right now. Please check the OpenAI key and your internet connection.' });
+      console.error(error.fix || 'No fix provided.');
+      return sendJson(res, 502, { error: { message: error.message || 'I cannot answer right now.', fix: error.fix || 'Try again later.' } });
     }
   }
   if (req.method === 'GET') return serveFile(req, res);
